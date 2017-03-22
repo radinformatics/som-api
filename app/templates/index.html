@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style>
+.som_text {
+  text-rendering: optimizeLegibility;
+  border-radius:5px;
+  margin-top:20px;
+  padding:20px 20px 0px 20px;
+  font-size:16px;
+  line-height:1.5;
+}
+#loggy:not(:empty) {
+  padding: 5px;
+  color: #000;
+}
+#loggy {
+  list-style: none;
+}
+#loggy li {
+  padding:5px;
+}
+
+</style>
+
+{% endblock %}
+    
+{% block content %}
+<div class="row">
+    <div class ="col-md-12">
+        <h1 style="color:#999">Data Loss Prevention (<a href="https://cloud.google.com/dlp/" target="_blank">DLP</a>) Test</h1>
+        
+        <form id="som_text" class="som_text form-horizontal" method="post" action="#">
+             <input id="csrf" name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
+             <div class="form-group">
+                 <textarea class="form-control" rows="5" id="description" name="text"></textarea>
+             </div>
+        </form>
+
+        <button id="run_button" class="btn btn-default btn-lg">Test</button>
+        <button id="clear_button" style="float:right" class="btn btn-default btn-lg">Clear</button>
+        <br>
+        <div style="padding-top:50px"><ul id="loggy"></ul></div>
+
+    
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+
+   var context = $(".som_text")[0];
+   var loggy = $("#loggy");
+   var csrf = $("#csrf").val()
+
+    $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf);
+            }
+        }
+    });
+
+    function removePHI(text) {
+
+        if (text == ''){
+            loggy.append("<li style='background:#F44336;padding:5px'>Please enter text first.</li>")
+        } else {
+
+        $.ajax({
+            url : "/clean", // the endpoint
+            type : "POST", // http method
+            data : { text: text }, // data sent with the post request
+
+            success : function(json) {
+                
+                console.log(json); // log the returned json to the console
+                var cleaned = json.cleaned
+                var original = json.original
+                loggy.append("<li style='background:#8BC34A;padding:5px'>ORIGINAL: " + cleaned + "</li>")
+                loggy.append("<li style='background:#29B6F6;padding:5px'>CLEANED: " + original + "</li>")
+            },
+
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+         });
+      }
+    }
+
+
+   $("#run_button").click(function(){
+       var text = $('#description').val();
+       removePHI(text)
+   })
+
+   $("#clear_button").click(function(){
+       $("#loggy").text('');
+       $("#description").val('');
+   })
+
+});
+</script>
+{% endblock %}
