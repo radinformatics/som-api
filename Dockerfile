@@ -61,7 +61,7 @@ RUN pip install singularity
 
 WORKDIR /tmp
 # Install SOM development branch
-RUN git clone https://github.com/radinformatics/som-tools.git -b add/datatstore --single-branch
+RUN git clone https://github.com/radinformatics/som-tools.git -b add/datastore --single-branch
 WORKDIR /tmp/som-tools
 RUN python setup.py install
 
