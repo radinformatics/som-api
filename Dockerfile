@@ -61,14 +61,14 @@ RUN pip install singularity
 
 WORKDIR /tmp
 # Install SOM development branch
-RUN git clone https://github.com/radinformatics/som-tools
+RUN git clone http://github.com/radinformatics/som-tools
 WORKDIR /tmp/som-tools
 RUN git checkout -b add/datastore
 RUN git pull origin add/datastore
 RUN python setup.py install
 
 WORKDIR /tmp
-RUN git clone https://github.com/singularityware/singularity
+RUN git clone http://github.com/singularityware/singularity
 WORKDIR /tmp/singularity
 RUN git checkout -b lib-refactor
 RUN git pull origin lib-refactor
