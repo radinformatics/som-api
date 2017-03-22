@@ -42,8 +42,10 @@ sudo apt-get -y install libtool \
                        git
 
 cd /tmp
-git clone https://www.singularityware/singularity
+git clone https://github.com/singularityware/singularity
 cd singularity
+git checkout -b development
+git pull origin development
 ./autogen.sh
 ./configure --prefix=/usr/local
 make
@@ -58,5 +60,6 @@ then
   git clone https://www.github.com/radinformatics/som-api
   cd som-api
   docker build -t vanessa/som-api .
+  # you need to add .env file here
   docker-compose up -d
 fi

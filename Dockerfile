@@ -68,7 +68,7 @@ RUN git pull origin add/datastore
 RUN python setup.py install
 
 WORKDIR /tmp
-RUN git clone http://www.github.com/singularityware/singularity
+RUN git clone https://github.com/singularityware/singularity
 WORKDIR /tmp/singularity
 RUN git checkout -b lib-refactor
 RUN git pull origin lib-refactor
