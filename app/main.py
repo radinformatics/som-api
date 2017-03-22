@@ -34,8 +34,9 @@ class SomServer(Flask):
 
 
 app = SomServer(__name__)
+app.secret_key = os.environ['HELLOKITTY']
 app.config['SESSION_TYPE'] = 'filesystem'
-app.secret_key = uuid.uuid4().__str__()
+
 
 # PW/csrf protect site ###############################################
 csrf = CSRFProtect(app)
