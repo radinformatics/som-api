@@ -34,6 +34,7 @@ class SomServer(Flask):
 
 
 app = SomServer(__name__)
+app.secret_key = uuid.uuid4().__str__()
 
 # PW/csrf protect site ###############################################
 csrf = CSRFProtect(app)
@@ -100,7 +101,6 @@ def remove_phi():
 
 
 if __name__ == '__main__':
-    app.secret_key = uuid.uuid4().__str__()
     app.config['SESSION_TYPE'] = 'filesystem'
     app.debug = False
     app.run(host='0.0.0.0')
